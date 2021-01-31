@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  kd-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+#    command: python manage.py runserver 0.0.0.0:8000
+    command: uwsgi --http 0.0.0.0:8000 --wsgi-file /code/pokedex/wsgi.py --static-map /static=/code/static/
+    container_name: kd-app
+    env_file:
+      - .env
+    volumes:
+      - .:/code
+    ports:
+      - "40002:8000"
+    networks:
+      - kd-network
+
+networks:
+  kd-network:
+    driver: bridge
